@@ -70,6 +70,10 @@
           "description": "A short description of the task. This is displayed when calling `task --list`.",
           "type": "string"
         },
+        "group": {
+          "description": "The group of the task. `task --list` shows tasks under a header for each group.",
+          "type": "string"
+        },
         "prompt": {
           "description": "One or more prompts that will be presented before a task is run. Declining will cancel running the current and any subsequent tasks.",
           "oneOf": [

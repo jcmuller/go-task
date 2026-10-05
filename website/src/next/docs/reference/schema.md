@@ -541,6 +541,21 @@ tasks:
       - go test ./...
 ```
 
+#### `group`
+
+- **Type**: `string`
+- **Description**: Group shown as a header in `--list`. Groups are sorted by
+  name, and tasks with no group come last.
+
+```yaml
+tasks:
+  test:
+    desc: Run unit tests
+    group: Testing
+    cmds:
+      - go test ./...
+```
+
 #### `summary`
 
 - **Type**: `string`

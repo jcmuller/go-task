@@ -18,6 +18,7 @@ type Task struct {
 	Deps          []*Dep
 	Label         string
 	Desc          string
+	Group         string `hash:"ignore"`
 	Prompt        Prompt
 	Summary       string
 	Requires      *Requires
@@ -138,6 +139,7 @@ func (t *Task) UnmarshalYAML(node *yaml.Node) error {
 			Deps          []*Dep
 			Label         string
 			Desc          string
+			Group         string
 			Prompt        Prompt
 			Summary       string
 			Aliases       []string
@@ -179,6 +181,7 @@ func (t *Task) UnmarshalYAML(node *yaml.Node) error {
 		t.Deps = task.Deps
 		t.Label = task.Label
 		t.Desc = task.Desc
+		t.Group = task.Group
 		t.Prompt = task.Prompt
 		t.Summary = task.Summary
 		t.Aliases = task.Aliases
@@ -223,6 +226,7 @@ func (t *Task) DeepCopy() *Task {
 		Deps:                 deepcopy.Slice(t.Deps),
 		Label:                t.Label,
 		Desc:                 t.Desc,
+		Group:                t.Group,
 		Prompt:               t.Prompt,
 		Summary:              t.Summary,
 		Aliases:              deepcopy.Slice(t.Aliases),

@@ -16,6 +16,7 @@ type (
 		Name     string    `json:"name"`
 		Task     string    `json:"task"`
 		Desc     string    `json:"desc"`
+		Group    string    `json:"group,omitempty"`
 		Summary  string    `json:"summary"`
 		Aliases  []string  `json:"aliases"`
 		UpToDate *bool     `json:"up_to_date,omitempty"`
@@ -38,6 +39,7 @@ func NewTask(task *ast.Task) Task {
 		Name:    task.Name(),
 		Task:    task.Task,
 		Desc:    task.Desc,
+		Group:   task.Group,
 		Summary: task.Summary,
 		Aliases: aliases,
 		Location: &Location{

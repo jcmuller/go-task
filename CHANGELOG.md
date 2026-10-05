@@ -21,6 +21,11 @@
   with the control characters removed so that a `prefix` cannot write over a
   line the mode already printed (#3049 by @jcmuller).
 
+- Added a `group` field to tasks. `task --list` shows the tasks of each group
+  under a `## <group>` header, with the groups sorted by name and the tasks
+  that have no group last. `task --list --json` includes the group (by
+  @jcmuller).
+
 ### 🐛 Fixes
 
 - Fixed a bug on Windows where watching source paths did not work as expected

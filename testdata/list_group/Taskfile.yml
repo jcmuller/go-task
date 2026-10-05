@@ -1,0 +1,17 @@
+version: '3'
+
+tasks:
+  build:
+    desc: Build the binary
+    group: Build
+
+  fmt:
+    desc: Format the code
+
+  lint:
+    desc: Lint the code
+    group: Checks
+
+  test:
+    desc: Run the tests
+    group: Checks

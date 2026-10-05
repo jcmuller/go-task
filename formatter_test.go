@@ -208,6 +208,32 @@ func TestListCanListDescOnly(t *testing.T) {
 	)
 }
 
+func TestListGroupsTasks(t *testing.T) {
+	t.Parallel()
+
+	NewFormatterTest(t,
+		WithExecutorOptions(
+			task.WithDir("testdata/list_group"),
+		),
+		WithListOptions(task.ListOptions{
+			ListOnlyTasksWithDescriptions: true,
+		}),
+	)
+}
+
+func TestListGroupsIncludedTasks(t *testing.T) {
+	t.Parallel()
+
+	NewFormatterTest(t,
+		WithExecutorOptions(
+			task.WithDir("testdata/list_group_included"),
+		),
+		WithListOptions(task.ListOptions{
+			ListOnlyTasksWithDescriptions: true,
+		}),
+	)
+}
+
 func TestListDescInterpolation(t *testing.T) {
 	t.Parallel()
 
@@ -227,6 +253,20 @@ func TestJsonListFormat(t *testing.T) {
 	NewFormatterTest(t,
 		WithExecutorOptions(
 			task.WithDir("testdata/json_list_format"),
+		),
+		WithListOptions(task.ListOptions{
+			FormatTaskListAsJSON: true,
+		}),
+		WithFixtureTemplating(),
+	)
+}
+
+func TestJsonListGroup(t *testing.T) {
+	t.Parallel()
+
+	NewFormatterTest(t,
+		WithExecutorOptions(
+			task.WithDir("testdata/json_list_group"),
 		),
 		WithListOptions(task.ListOptions{
 			FormatTaskListAsJSON: true,

@@ -1,0 +1,10 @@
+task: Available tasks for this project:
+
+## Build
+* build:       Build the binary
+
+## Checks
+* lint:       Lint the code
+* test:       Run the tests
+
+* fmt:       Format the code

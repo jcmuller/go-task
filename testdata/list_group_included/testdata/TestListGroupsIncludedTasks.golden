@@ -1,0 +1,4 @@
+task: Available tasks for this project:
+
+## Lib
+* lib:build:       Build the library

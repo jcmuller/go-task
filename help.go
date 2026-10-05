@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"maps"
 	"os"
+	"slices"
 	"strings"
 
 	"github.com/Ladicle/tabwriter"
@@ -89,20 +91,54 @@ func (e *Executor) ListTasks(o ListOptions) (bool, error) {
 
 	// Format in tab-separated columns with a tab stop of 8.
 	w := tabwriter.NewWriter(e.Stdout, 0, 8, 6, ' ', 0)
-	for _, task := range tasks {
-		e.Logger.FOutf(w, logger.Yellow, "* ")
-		e.Logger.FOutf(w, logger.Green, task.Task)
-		desc := strings.ReplaceAll(task.Desc, "\n", " ")
-		e.Logger.FOutf(w, logger.Default, ": \t%s", desc)
-		if len(task.Aliases) > 0 {
-			e.Logger.FOutf(w, logger.Cyan, "\t(aliases: %s)", strings.Join(task.Aliases, ", "))
+	groups := groupTasks(tasks)
+	grouped := len(groups) > 1 || groups[0].name != ""
+	for _, g := range groups {
+		if grouped {
+			_, _ = fmt.Fprint(w, "\n")
+			if g.name != "" {
+				e.Logger.FOutf(w, logger.Default, "## %s\n", g.name)
+			}
 		}
-		_, _ = fmt.Fprint(w, "\n")
+		for _, task := range g.tasks {
+			e.Logger.FOutf(w, logger.Yellow, "* ")
+			e.Logger.FOutf(w, logger.Green, task.Task)
+			desc := strings.ReplaceAll(task.Desc, "\n", " ")
+			e.Logger.FOutf(w, logger.Default, ": \t%s", desc)
+			if len(task.Aliases) > 0 {
+				e.Logger.FOutf(w, logger.Cyan, "\t(aliases: %s)", strings.Join(task.Aliases, ", "))
+			}
+			_, _ = fmt.Fprint(w, "\n")
+		}
 	}
 	if err := w.Flush(); err != nil {
 		return false, err
 	}
 	return true, nil
+}
+
+type taskGroup struct {
+	name  string
+	tasks []*ast.Task
+}
+
+// groupTasks splits tasks by their group. Named groups come first, sorted by
+// name, and the ungrouped tasks come last. Each group keeps the task order.
+func groupTasks(tasks []*ast.Task) []taskGroup {
+	byName := map[string][]*ast.Task{}
+	for _, task := range tasks {
+		byName[task.Group] = append(byName[task.Group], task)
+	}
+	groups := make([]taskGroup, 0, len(byName))
+	for _, name := range slices.Sorted(maps.Keys(byName)) {
+		if name != "" {
+			groups = append(groups, taskGroup{name: name, tasks: byName[name]})
+		}
+	}
+	if ungrouped, ok := byName[""]; ok {
+		groups = append(groups, taskGroup{tasks: ungrouped})
+	}
+	return groups
 }
 
 // ListTaskNames prints only the task names in a Taskfile.
